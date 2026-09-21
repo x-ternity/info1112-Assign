@@ -74,3 +74,22 @@ while IFS=, read -r name reg addr; do
     bytes+=( $(( (opcode << 2) + reg )) )
     bytes+=( "$addr" )
 done <<< "$instructions"
+
+#Echo what type of program it is
+if [ "$kind" = "QUIT" ]; then
+    echo "It is a QUIT program"
+else
+    echo "It is an ADD/SUB program"
+fi
+
+#Writing and printing the .bin files
+outfile="${1%.vsc}.bin"
+: > "$outfile"
+
+echo "The content of the .bin file is"
+for b in "${bytes[@]}"; do
+    printf "%02x\n" "$b"
+    printf "\x$(printf %02x "$b")" >> "$outfile"
+done
+
+exit 0
