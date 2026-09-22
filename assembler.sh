@@ -26,7 +26,7 @@ if [ ! -f "$1" ]; then
 fi
 
 if [ ! -s "$1" ]; then
-    echo "usage: the file is empty - no .bin file is produced"
+    echo "usage: the file is empty – no .bin file is produced"
     exit 1
 fi
 
