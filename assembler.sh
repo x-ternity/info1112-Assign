@@ -35,6 +35,12 @@ n_values=$(head -n 1 "$1")
 statics=$(tail -n +2 "$1" | head -n "$n_values")
 instructions=$(tail -n +$((n_values + 2)) "$1")
 
+#checking if first line is either 2 or 0
+if [ $(n_values) != "0"] && [ $(n_values) != "2"]; then
+    echo "error: First line must be 2 or 0"
+    exit 1
+fi
+
 #turning the bytes into a list
 bytes=()
 
