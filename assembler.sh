@@ -31,11 +31,13 @@ if [ ! -s "$1" ]; then
 fi
 
 #Spltting .vsc file into 3 parts
+#getting the first line value
 n_values=$(head -n 1 "$1")
+#skips line 1  and takes everything else, then keep only the fisrt 2 values
 statics=$(tail -n +2 "$1" | head -n "$n_values")
+#add together the quantity of nvalue and statistic then get everything else from then onwards.
 instructions=$(tail -n +$((n_values + 2)) "$1")
 
-#checking if first line is either 2 or 0
 if [ $(n_values) != "0"] && [ $(n_values) != "2"]; then
     echo "error: First line must be 2 or 0"
     exit 1
@@ -73,10 +75,12 @@ while IFS=, read -r name reg addr; do
         opcode=9
     fi
 
+#if its ADD or SUB file then at the end print out that its ADD or SUB file
     if [ "$name" = "ADD" ] || [ "$name" = "SUB" ]; then
         kind="ADD/SUB"
     fi
 
+#Left shift binary by 2 digits in order to add space for the reg which takes up 2 binary worth plus the 6 from the opcode
     bytes+=( $(( (opcode << 2) + reg )) )
     bytes+=( "$addr" )
 done <<< "$instructions"
@@ -94,8 +98,10 @@ outfile="${1%.vsc}.bin"
 
 echo "The content of the .bin file is"
 for b in "${bytes[@]}"; do
+#print out the result in hexadecimal format
     printf "%02x\n" "$b"
     printf "\x$(printf %02x "$b")" >> "$outfile"
 done
 
 exit 0
+
